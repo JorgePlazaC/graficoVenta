@@ -1,0 +1,60 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<head>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Year', 'Sales'],
+                ['2017', 1000],
+                ['2018', 1170],
+                ['2019', 660],
+                ['2020', 1030]
+            ]);
+
+            var options = {
+                title: 'Sales Performance',
+                curveType: 'function', // Utiliza curvas suaves para las líneas
+                legend: { position: 'none' } // Opcional: Oculta la leyenda
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+</div>
+
+<div id="chart_div"></div>
+
+<table class="table">
+    <tr><th>Cantidad</th><th>Precio</th></tr>
+
+    @foreach (var v in Model.ventasDias)
+    {
+        <tr><td>@v.Cantidad</td><td>@v.Precio</td></tr>
+    }
+
+</table>
+
+<table class="table">
+    <tr><th>Nombre</th><th>Precio</th></tr>
+
+    @foreach (var v in Model.productosVendidos)
+    {
+        <tr><td>@v.Nombre</td><td>@v.Precio</td></tr>
+    }
+
+</table>
