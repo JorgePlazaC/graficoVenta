@@ -17,11 +17,11 @@
 
             // Aquí es donde se agregan los datos al gráfico
             var datos = @Html.Raw(Json.Serialize(Model.sumaTotalPorFecha));
-for (var fecha in datos) {
-    var sumaTotal = datos[fecha];
-    var fechaSinCeros = new Date(fecha).toLocaleDateString('es-ES');
-    data.addRow([fechaSinCeros, sumaTotal]);
-}
+                for (var fecha in datos) {
+                    var sumaTotal = datos[fecha];
+                    var fechaSinCeros = new Date(fecha).toLocaleDateString('es-ES');
+                    data.addRow([fechaSinCeros, sumaTotal]);
+                }
 
             var options = {
                 title: 'Suma Total de Precios por Fecha',
@@ -30,7 +30,8 @@ for (var fecha in datos) {
                 hAxis: {
                     format: 'MMM d, yyyy', // Formato de la fecha (ejemplo: Jun 1, 2023)
                     gridlines: { count: -1 } // Mostrar todas las fechas sin agrupar
-                }
+                },
+                bar: { groupWidth: '80%' } // Ancho predeterminado de las barras, puedes ajustar el valor según tus necesidades
             };
             var chart = new google.charts.Bar(document.getElementById('chart_div'));
             chart.draw(data, options);
@@ -39,11 +40,17 @@ for (var fecha in datos) {
 </head>
 
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<label for="fecha">Fecha:</label>
+<input type="date" id="fecha">
 
-</div>
+<script>
+    var fechaInput = document.getElementById('fecha');
+    fechaInput.addEventListener('change', function () {
+        var fechaSeleccionada = fechaInput.value;
+        console.log(fechaSeleccionada); // Aquí puedes hacer lo que necesites con la fecha seleccionada
+        @Model.fechaInicio = fechaSeleccionada;
+    });
+</script>
 
 <div id="chart_div"></div>
 

@@ -13,6 +13,9 @@ public class IndexModel : PageModel
     public List<Ventum> ventum;
     public List<Producto> productosVendidos;
     public Dictionary<DateTime, int> sumaTotalPorFecha;
+
+    public DateTime fechaInicio;
+    public DateTime fechaFin; 
     private readonly ILogger<IndexModel> _logger;
 
     public IndexModel(ILogger<IndexModel> logger)
@@ -28,8 +31,8 @@ public class IndexModel : PageModel
         ventum = context.Venta.ToList();
 
         DateTime fechaDeterminada = new DateTime(2023, 5, 20); // Fecha determinada que deseas consultar
-        DateTime fechaInicio = new DateTime(2023, 5, 20);
-        DateTime fechaFin = new DateTime(2023, 5, 31);
+        fechaInicio = new DateTime(2023, 5, 20);
+        fechaFin = new DateTime(2023, 5, 31);
 
         productosVendidos = context.VentaProductos
             .Where(vp => vp.Venta.Fecha.Date == fechaDeterminada.Date)
