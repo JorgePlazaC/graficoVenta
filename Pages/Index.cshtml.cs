@@ -12,7 +12,7 @@ public class IndexModel : PageModel
     public List<Producto> productos;
     public List<Ventum> ventum;
     public List<Producto> productosVendidos;
-    public List<Decimal> sumaTotalPorFecha; 
+    public Dictionary<DateTime, int> sumaTotalPorFecha;
     private readonly ILogger<IndexModel> _logger;
 
     public IndexModel(ILogger<IndexModel> logger)
@@ -36,12 +36,12 @@ public class IndexModel : PageModel
             .Select(vp => vp.Producto)
             .ToList();
 
-        
+
         sumaTotalPorFecha = context.VentaProductos
-            .Where(vp => vp.Venta.Fecha >= fechaInicio && vp.Venta.Fecha <= fechaFin)
-            .GroupBy(vp => vp.Venta.Fecha.Date)
-            .Select(g => g.Sum(vp => vp.Precio))
-            .ToList();
-        
+    .Where(vp => vp.Venta.Fecha >= fechaInicio && vp.Venta.Fecha <= fechaFin)
+    .GroupBy(vp => vp.Venta.Fecha.Date)
+    .ToDictionary(g => g.Key.Date, g => g.Sum(vp => vp.Precio));
+
+
     }
 }

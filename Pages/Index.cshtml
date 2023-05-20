@@ -5,31 +5,39 @@
 }
 
 <head>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script>
-        google.charts.load('current', { packages: ['corechart'] });
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['bar'] });
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Year', 'Sales'],
-                ['2017', 1000],
-                ['2018', 1170],
-                ['2019', 660],
-                ['2020', 1030]
-            ]);
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Fecha');
+            data.addColumn('number', 'Suma Total de Precios');
+
+            // Aquí es donde se agregan los datos al gráfico
+            var datos = @Html.Raw(Json.Serialize(Model.sumaTotalPorFecha));
+for (var fecha in datos) {
+    var sumaTotal = datos[fecha];
+    var fechaSinCeros = new Date(fecha).toLocaleDateString('es-ES');
+    data.addRow([fechaSinCeros, sumaTotal]);
+}
 
             var options = {
-                title: 'Sales Performance',
-                curveType: 'function', // Utiliza curvas suaves para las líneas
-                legend: { position: 'none' } // Opcional: Oculta la leyenda
+                title: 'Suma Total de Precios por Fecha',
+                bars: 'vertical', // Orientación vertical de las barras
+                legend: { position: 'bottom' },
+                hAxis: {
+                    format: 'MMM d, yyyy', // Formato de la fecha (ejemplo: Jun 1, 2023)
+                    gridlines: { count: -1 } // Mostrar todas las fechas sin agrupar
+                }
             };
-
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            var chart = new google.charts.Bar(document.getElementById('chart_div'));
             chart.draw(data, options);
         }
     </script>
 </head>
+
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
@@ -55,6 +63,16 @@
     @foreach (var v in Model.productosVendidos)
     {
         <tr><td>@v.Nombre</td><td>@v.Precio</td></tr>
+    }
+
+</table>
+
+<table class="table">
+    <tr><th>Nombre</th><th>Precio</th></tr>
+
+    @foreach (var v in Model.sumaTotalPorFecha)
+    {
+        <tr><td>@v</td><td>@v</td></tr>
     }
 
 </table>
