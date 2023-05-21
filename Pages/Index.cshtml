@@ -37,6 +37,25 @@
             chart.draw(data, options);
         }
     </script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Producto');
+            data.addColumn('number', 'Ventas');
+            data.addRows(@Html.Raw(Json.Serialize(Model.ventasPorProducto.Select(vp => new object[] { vp.Producto.Nombre, vp.Ventas }))));
+
+            var options = {
+                title: 'Ventas por Producto',
+                is3D: true,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div1'));
+            chart.draw(data, options);
+        }
+    </script>
 </head>
 
 
@@ -53,7 +72,8 @@
 </script>
 
 <div id="chart_div"></div>
-
+<div id="chart_div1"></div>
+<!--
 <table class="table">
     <tr><th>Cantidad</th><th>Precio</th></tr>
 
@@ -80,6 +100,16 @@
     @foreach (var v in Model.sumaTotalPorFecha)
     {
         <tr><td>@v</td><td>@v</td></tr>
+    }
+
+</table>
+-->
+<table class="table">
+    <tr><th>Nombre</th><th>Precio</th></tr>
+
+    @foreach (var v in Model.ventasPorProducto)
+    {
+        <tr><td>@v.Producto.Nombre</td><td>@v.Ventas</td></tr>
     }
 
 </table>
